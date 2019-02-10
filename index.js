@@ -12,10 +12,8 @@ http.get(`${host}/mediawiki/index.php?title=Special:Categories&offset=&limit=500
     res.on('data', (chunk) => data += chunk);
     res.on('end', () => {
         let dom = new JSDOM(data).window.document;
-        let elements = Array.from(dom.getElementById('mw-content-text').getElementsByTagName('a')).filter(elem => {
-            RegExp('/wiki/Category*').test(elem)
-        });
-        dataToFile('data/categories.txt', createCategoryObject(elements), true);
+        let elements = Array.from(dom.getElementById('mw-content-text').getElementsByTagName('a')).filter(elem => RegExp('/wiki/Category*').test(elem));
+        dataToFile('categories.txt', elements, true);
         
         // writeStream.on('close', () => {
         //     const rl = readline.createInterface({
@@ -63,8 +61,10 @@ http.get(`${host}/mediawiki/index.php?title=Special:Categories&offset=&limit=500
  */
 function dataToFile(filename, data, append){
     let ws = fs.createWriteStream(`data/${filename}`, {flags: `${append ? 'a' : 'w'}`});
-    data.forEach(d => ws.write(`${JSON.stringify(d)}\n`));
-    writeStream.end('');
+    for( let d of data){
+        ws.write(`${JSON.stringify(createCategoryObject(d))}\n`);
+    }
+    ws.end('');
 }
 
 /**
