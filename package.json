@@ -1,0 +1,14 @@
+{
+  "name": "ihriswikimenu",
+  "version": "1.0.0",
+  "description": "This app is used to aggregate scattered URLs in the iHRIS wiki, and then we use these to create a nicely looking iHRIS wiki menu browser addon",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Sovello Hildebrand",
+  "license": "MIT",
+  "dependencies": {
+    "jsdom": "^13.2.0"
+  }
+}
