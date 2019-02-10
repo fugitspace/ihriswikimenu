@@ -3,6 +3,8 @@ const jsdom = require('jsdom');
 const { JSDOM } = jsdom;
 const fs = require('fs');
 const readline = require('readline');
+const events = require('events');
+const fd = new events.EventEmitter();
 
 const host = 'https://wiki.ihris.org'; 
 //read all categories
@@ -15,38 +17,26 @@ http.get(`${host}/mediawiki/index.php?title=Special:Categories&offset=&limit=500
         let elements = Array.from(dom.getElementById('mw-content-text').getElementsByTagName('a')).filter(elem => RegExp('/wiki/Category*').test(elem));
         dataToFile('categories.txt', elements, true);
         
-        // writeStream.on('close', () => {
-        //     const rl = readline.createInterface({
-        //         input: fs.createReadStream('data/categories.txt'),
-        //         crlfDelay: Infinity // wait for both \r and \n
-        //     });
-        //     rl.on('line', (line) => {
-        //         // need to be careful here. let's finish processing the line until we are done then move to the next line.
-        //         // otherwise, these are going to be intertwined so much so that we can't control
-        //         let lineJson = JSON.parse(line);
-        //         http.get(`${host}${lineJson.url}`, (res) => {
-        //             let newdata = '';
-        //             res.on('data', (chunk) => newdata += chunk);
-        //             res.on('end', () => {
-        //                 let newdom = new JSDOM(newdata).window.document;
-        //                 let newwriteStream = fs.createWriteStream('data/pages.txt', {flags: 'a'});
-        //                 let links_div = newdom.getElementById('mw-pages');
-        //                 links_div =  links_div ? links_div : newdom.getElementById('mw-content-text'); 
-        //                 Array.from(links_div.getElementsByTagName('a')).map((newelem) => {
-        //                     if(!RegExp('/wiki/Category*').test(newelem)) {
-        //                         let urls = {
-        //                             category: lineJson.text,
-        //                             url: newelem.href,
-        //                             text: newelem.innerHTML
-        //                         };
-        //                         newwriteStream.write(`${JSON.stringify(urls)}\n`);
-        //                     }
-        //                 });
-        //             });
-        //         }).on('error', () => console.log(`Error: ${e.message}`));
-        //     });
-        // });
-
+        fd.on('close', () => {
+            const rl = readline.createInterface({
+                input: fs.createReadStream('data/categories.txt'),
+                crlfDelay: Infinity // wait for both \r and \n
+            });
+            rl.on('line', (line) => {
+                let lineJson = JSON.parse(line);
+                http.get(`${host}${lineJson.url}`, (res) => {
+                    let newdata = '';
+                    res.on('data', (chunk) => newdata += chunk);
+                    res.on('end', () => {
+                        let newdom = new JSDOM(newdata).window.document;
+                     let links_div = newdom.getElementById('mw-pages');
+                    links_div =  links_div ? links_div : newdom.getElementById('mw-content-text'); 
+                    let all_links = Array.from(links_div.getElementsByTagName('a')).filter(newelem => !RegExp('/wiki/Category*').test(newelem));
+                    dataToFile('all_urls.txt', all_links, true, lineJson.category);
+                    });
+                });
+            });
+        });
     });
 }).on('error', (e) => {
     console.error(`Got an error: ${e.message}`);
@@ -59,12 +49,19 @@ http.get(`${host}/mediawiki/index.php?title=Special:Categories&offset=&limit=500
  * @param {boolean} append if true, data will be appended to filename
  * 
  */
-function dataToFile(filename, data, append){
+function dataToFile(filename, data, append, category){
     let ws = fs.createWriteStream(`data/${filename}`, {flags: `${append ? 'a' : 'w'}`});
+    if(category) {
+        for(let d of data) {
+            ws.write(`${JSON.stringify(createURLObject(d, category))}\n`);
+        }
+        return;
+    }
     for( let d of data){
         ws.write(`${JSON.stringify(createCategoryObject(d))}\n`);
     }
-    ws.end('');
+    ws.end(''); // must explicitly have this for finish/close event to fire
+    ws.on('finish', () => fd.emit('close'));
 }
 
 /**
@@ -75,5 +72,13 @@ function createCategoryObject(dom_obj){
     return {
         url: dom_obj.href,
         category: dom_obj.innerHTML
+    };
+}
+
+function createURLObject(dom_obj, category) {
+    return {
+        category: category,
+        url: dom_obj.href,
+        text: dom_obj.innerHTML
     };
 }
