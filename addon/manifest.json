@@ -1,0 +1,19 @@
+{
+    "manifest_version": 2,
+    "name": "iHRISWikiMenu",
+    "version": "0.1",
+
+    "description": "Adds a category based menu for the iHRIS wiki at https://wiki.ihris.org/wiki",
+
+    "icons": {
+        "48": "icons/logo-48.png",
+        "96": "icons/logo-96.png"
+    },
+
+    "content_scripts": [
+        {
+            "matches": ["*://wiki.ihris.org/wiki/*"],
+            "js": ["sidebarmenu.js"]
+        }
+    ]
+}
