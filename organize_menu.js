@@ -19,10 +19,11 @@ function organize(line) {
 }
 
 function addToMenu(item, processed) {
-    if(processed) {
-        menu[item.category].push({ url: item.url, text: item.text});
-        return;
+    if(!processed) {
+        keys.push(item.category);
     }
-    keys.push(item.category);
-    menu[item.category].push({ url: item.url, text: item.text});
+    menu[item.category].push({ 
+        url: item.url, 
+        text: item.text
+    });
 }
