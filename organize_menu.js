@@ -8,11 +8,21 @@ var keys = [];
 function organize(line) {
     // parse line into json object
     // {"category":"Blueprints","url":"/wiki/Organizational_Charts","text":"Organizational Charts"}
+
+    const line_json = JSON.parse(line);
     // read the key
+    if(keys.includes(line_json.category)) {
+        addToMenu(line_json, true);
+    } else {
+        addToMenu(line_json, false);
+    }
+}
 
-    // check if key exists in keys
-
-    // add to it an entry of {url:"", "text"}
-
-    // 
+function addToMenu(item, processed) {
+    if(processed) {
+        menu[item.category].push({ url: item.url, text: item.text});
+        return;
+    }
+    keys.push(item.category);
+    menu[item.category].push({ url: item.url, text: item.text});
 }
