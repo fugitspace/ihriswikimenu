@@ -17,7 +17,7 @@ rl.on('line', (line) => {
 });
 
 fd.on('close', () => {
-    const ws = fs.createWriteStream('data/organized_links.json', {flags: 'a'});
+    const ws = fs.createWriteStream('data/organized_links.json', {flags: 'w'});
     ws.write(JSON.stringify(menu));
 });
 
