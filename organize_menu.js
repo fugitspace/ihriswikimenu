@@ -1,22 +1,26 @@
 const fs = require('fs');
 const readline = require('readline');
 const events = require('events');
-const fd = new events.EventEmitter();
+//const fd = new events.EventEmitter();
 
 var menu = {};
 var keys = [];
 
+fd = fs.createReadStream('data/all_urls.txt');
 // read the file line by line and process
 const rl = readline.createInterface({
-    input: fs.createReadStream('data/all_urls.txt'),
+    input: fd,
     crlfDelay: Infinity // wait for both \r and \n
 });
 rl.on('line', (line) => {
     organize(line);
 });
-rl.on('end', () => {
-    console.log(menu);
-})
+
+fd.on('close', () => {
+    const ws = fs.createWriteStream('data/organized_links.json', {flags: 'a'});
+    ws.write(JSON.stringify(menu));
+});
+
 
 function organize(line) {
     // parse line into json object
@@ -45,5 +49,4 @@ function addToMenu(item, processed) {
             text: item.text || ''
         });
     }
-    console.log(menu);
 }
