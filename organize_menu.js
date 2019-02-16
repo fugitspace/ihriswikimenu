@@ -2,7 +2,6 @@ const fs = require('fs');
 const readline = require('readline');
 
 var menu = {};
-var wikimediaMenu = {};
 fd = fs.createReadStream('data/all_urls.txt');
 // read the file line by line and process
 const rl = readline.createInterface({

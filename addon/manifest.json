@@ -15,5 +15,9 @@
             "matches": ["*://wiki.ihris.org/wiki/*"],
             "js": ["sidebarmenu.js"]
         }
+    ],
+
+    "web_accessible_resources": [
+        "data/links.html"
     ]
 }
