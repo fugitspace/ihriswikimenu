@@ -18,7 +18,11 @@ rl.on('line', (line) => {
 fd.on('close', () => {
     const ws = fs.createWriteStream('data/organized_links.json', {flags: 'w'});
     const wikiWriteStream = fs.createWriteStream('data/wikimedia_links.txt', {flags: 'w'});
+    const htmlWriteStream = fs.createWriteStream('data/links.html', {flags: 'w'});
+    htmlWriteStream.write(`<div id="accordion">\n`);
     makeWikimediaMenus(menu, wikiWriteStream);
+    buildHTMLCollapsible(menu, htmlWriteStream);
+    htmlWriteStream.write(`</div>`)
     ws.write(JSON.stringify(menu));
 });
 
@@ -45,5 +49,28 @@ function makeWikimediaMenus(organized_menu, writeStream) {
         organized_menu[key].forEach(link => {
             writeStream.write(`** [[${link.text}]]\n`);
         });
+    });
+}
+
+function buildHTMLCollapsible(organized_menu, writeStream) {
+    // create a bootstrap accordion card
+    // collapse id like collapseOne, collapseTwo, collapseThree, etc
+    Object.keys(organized_menu).forEach(key => {
+        const heading_id = `${key.replace(/\s+/g, '-', '-')}`;
+        const collapse_id = `collapse-${heading_id}`
+        writeStream.write(`\t<div class="card">\n`); //initialize the card
+        writeStream.write(`\t\t<div class="card-header" id=${heading_id}>\n`)
+        writeStream.write(`\t\t\t<h5 class="mb-0">\n`);
+        writeStream.write(`\t\t\t\t<button class="btn btn-link" data-toggle="collapse" data-target="#${collapse_id}" aria-expanded="true" aria-controls="${collapse_id}">${key}</button>\n`);
+        writeStream.write(`\t\t\t</h5>\n`);
+        writeStream.write(`\t\t</div>\n`);
+        writeStream.write(`\t\t<div id="${collapse_id}"  class="collapse show" aria-labelledby="${heading_id}" data-parent="#accordion">\n`);
+        writeStream.write(`\t\t\t<div class="card-body">\n`);
+        organized_menu[key].forEach(link => {
+            writeStream.write(`\t\t\t\t<a href="${link.url}">${link.text}</a>\n`);
+        });
+        writeStream.write(`\t\t\t</div>\n`);
+        writeStream.write(`\t\t</div>\n`);
+        writeStream.write(`\t</div>\n`);
     });
 }
