@@ -2,7 +2,7 @@ const fs = require('fs');
 const readline = require('readline');
 
 var menu = {};
-
+var wikimediaMenu = {};
 fd = fs.createReadStream('data/all_urls.txt');
 // read the file line by line and process
 const rl = readline.createInterface({
@@ -17,6 +17,8 @@ rl.on('line', (line) => {
 //when done reading the urls into the object, we write to file as JSON
 fd.on('close', () => {
     const ws = fs.createWriteStream('data/organized_links.json', {flags: 'w'});
+    const wikiWriteStream = fs.createWriteStream('data/wikimedia_links.txt', {flags: 'w'});
+    makeWikimediaMenus(menu, wikiWriteStream);
     ws.write(JSON.stringify(menu));
 });
 
@@ -34,5 +36,14 @@ function organize(line) {
     menu[item.category].push({ 
         url: item.url, 
         text: item.text || ''
+    });
+}
+
+function makeWikimediaMenus(organized_menu, writeStream) {
+    Object.keys(organized_menu).forEach(key => {
+        writeStream.write(`\n\n* ${key}\n`);
+        organized_menu[key].forEach(link => {
+            writeStream.write(`** [[${link.text}]]\n`);
+        });
     });
 }
