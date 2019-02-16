@@ -1,10 +1,7 @@
 const fs = require('fs');
 const readline = require('readline');
-const events = require('events');
-//const fd = new events.EventEmitter();
 
 var menu = {};
-var keys = [];
 
 fd = fs.createReadStream('data/all_urls.txt');
 // read the file line by line and process
@@ -23,7 +20,10 @@ fd.on('close', () => {
     ws.write(JSON.stringify(menu));
 });
 
-
+/**
+ * organize the data into hierarchical links
+ * @param {String} line line read from the file 
+ */
 function organize(line) {
     // parse line into json object
     // {"category":"Blueprints","url":"/wiki/Organizational_Charts","text":"Organizational Charts"}
