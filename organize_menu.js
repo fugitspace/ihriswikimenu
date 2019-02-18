@@ -58,12 +58,12 @@ function buildHTMLCollapsible(organized_menu, writeStream) {
         const heading_id = `${key.replace(/\s+/g, '-', '-')}`;
         const collapse_id = `collapse-${heading_id}`
         writeStream.write(`\t<div class="card">\n`); //initialize the card
-        writeStream.write(`\t\t<div class="card-header" id=${heading_id}>\n`)
+        writeStream.write(`\t\t<div class="card-header" id="${heading_id}">\n`)
         writeStream.write(`\t\t\t<h5 class="mb-0">\n`);
         writeStream.write(`\t\t\t\t<button class="btn btn-link" data-toggle="collapse" data-target="#${collapse_id}" aria-expanded="true" aria-controls="${collapse_id}">${key}</button>\n`);
         writeStream.write(`\t\t\t</h5>\n`);
         writeStream.write(`\t\t</div>\n`);
-        writeStream.write(`\t\t<div id="${collapse_id}"  class="collapse show" aria-labelledby="${heading_id}" data-parent="#accordion">\n`);
+        writeStream.write(`\t\t<div id="${collapse_id}"  class="collapse" aria-labelledby="${heading_id}" data-parent="#accordion">\n`);
         writeStream.write(`\t\t\t<div class="card-body">\n`);
         organized_menu[key].forEach(link => {
             writeStream.write(`\t\t\t\t<a href="${link.url}">${link.text}</a>\n`);
