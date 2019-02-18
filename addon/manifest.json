@@ -10,10 +10,20 @@
         "96": "icons/logo-96.png"
     },
 
+    "permissions": [
+        "activeTab"
+    ],
+
+    "browser_action":{
+        "default_icon": "icons/logo-32.png",
+        "default_title": "iHRIS Wiki Meu",
+        "default_popup": "menu/index.html"
+    },
+    
     "content_scripts": [
         {
             "matches": ["*://wiki.ihris.org/wiki/*"],
-            "js": ["sidebarmenu.js"]
+            "js": ["ihriswikimenu.js"]
         }
     ],
 
