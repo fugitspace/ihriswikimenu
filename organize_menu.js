@@ -65,9 +65,11 @@ function buildHTMLCollapsible(organized_menu, writeStream) {
         writeStream.write(`\t\t</div>\n`);
         writeStream.write(`\t\t<div id="${collapse_id}"  class="collapse" aria-labelledby="${heading_id}" data-parent="#accordion">\n`);
         writeStream.write(`\t\t\t<div class="card-body">\n`);
+        writeStream.write(`\t\t\t\t<ul class="list-group">\n`);
         organized_menu[key].forEach(link => {
-            writeStream.write(`\t\t\t\t<a href="${link.url}">${link.text}</a>\n`);
+            writeStream.write(`\t\t\t\t\t<a class="list-group-item list-group-item-action" href="${link.url}">${link.text}</a>\n`);
         });
+        writeStream.write(`\t\t\t\t</ul>\n`);
         writeStream.write(`\t\t\t</div>\n`);
         writeStream.write(`\t\t</div>\n`);
         writeStream.write(`\t</div>\n`);
