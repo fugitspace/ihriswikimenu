@@ -11,14 +11,25 @@
     },
 
     "permissions": [
-        "activeTab"
+        "activeTab",
+        "tabs"
     ],
 
     "background": {
         "scripts": [
-            "browser-polyfill.js"
+            "browser-polyfill.js",
+            "/menu/index.js"
         ]
     },
+
+    "content_scripts": [{
+        "matches": ["*://wiki.ihris.org/wiki"],
+
+        "js": [
+            "browser-polyfill.js",
+            "/content_scripts/ihriswikimenu.js"
+        ]
+    }],
 
     "browser_action":{
         "default_icon": "icons/logo-32.png",
