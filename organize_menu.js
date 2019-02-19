@@ -20,7 +20,7 @@ fd.on('close', () => {
     const htmlWriteStream = fs.createWriteStream('data/links.html', {flags: 'w'});
     htmlWriteStream.write(`<div id="accordion">\n`);
     makeWikimediaMenus(menu, wikiWriteStream);
-    buildHTMLCollapsible(menu, htmlWriteStream);
+    buildPlainMenu(menu, htmlWriteStream);
     htmlWriteStream.write(`</div>`)
     ws.write(JSON.stringify(menu));
 });
@@ -77,5 +77,11 @@ function buildHTMLCollapsible(organized_menu, writeStream) {
 }
 
 function buildPlainMenu(organized_menu, writeStream) {
-    
+    writeStream.write(`<ul class="list-group">\n`);
+    Object.keys(organized_menu).forEach(key => {
+        organized_menu[key].forEach(link => {
+            writeStream.write(`\t<a class="list-group-item list-group-item-action" href="https://wiki.ihris.org${link.url}">${link.text}</a>\n`);
+        });
+    });
+    writeStream.write(`</ul>\n`);
 }
