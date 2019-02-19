@@ -1,6 +1,4 @@
 function search(){
-    //for this to work you currently need to disable csp in about:config.
-    //this should not go into production security.csp.enable, security.csp.enableStrictDynamic
     const qry = document.getElementById('search_input');
     qry.addEventListener('keyup', () => {
         const needle = qry.value.toUpperCase();
@@ -20,7 +18,7 @@ function search(){
 }
 
 function reportExecuteError(error){
-    console.error(`Failed to execute script: ${error}`);
+    console.error(`Failed to execute script: ${error.message}`);
 }
 
 browser.tabs.executeScript({file: '/content_scripts/ihriswikimenu.js'})
