@@ -1,9 +1,9 @@
 (function(){
-    if(window.hasRun) {
-        return;
-    }
-    window.hasRun = true;
-
+    // if(window.hasRun) {
+    //     return;
+    // }
+    // window.hasRun = true;
+    console.error('content script invoked');
 
     /**
      * Need to insert this menu to the navigation panel

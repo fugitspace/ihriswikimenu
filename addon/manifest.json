@@ -14,20 +14,15 @@
         "activeTab"
     ],
 
+    "background": {
+        "scripts": [
+            "browser-polyfill.js"
+        ]
+    },
+
     "browser_action":{
         "default_icon": "icons/logo-32.png",
         "default_title": "iHRIS Wiki Meu",
         "default_popup": "menu/index.html"
-    },
-    
-    "content_scripts": [
-        {
-            "matches": ["*://wiki.ihris.org/wiki/*"],
-            "js": ["ihriswikimenu.js"]
-        }
-    ],
-
-    "web_accessible_resources": [
-        "data/links.html"
-    ]
+    }
 }
