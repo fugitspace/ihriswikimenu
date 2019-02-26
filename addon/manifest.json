@@ -23,7 +23,7 @@
     },
 
     "content_scripts": [{
-        "matches": ["*://wiki.ihris.org/wiki"],
+        "matches": ["<all_urls>"],
 
         "js": [
             "browser-polyfill.js",

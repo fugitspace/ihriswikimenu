@@ -15,6 +15,7 @@ function search(){
         }
         
     });
+    qry.focus(); //set focus on the search bar
 }
 
 function reportExecuteError(error){
