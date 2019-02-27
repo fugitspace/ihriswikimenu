@@ -23,13 +23,10 @@ function onError(error){
 }
 
 function openURL(){
-    const anchor = document.querySelector('a');
-    console.log("openURL running now");
-    document.addEventListener('click', (event) => {
-        console.log(event);
-        if(event.target.href){
+    document.body.addEventListener('click', (event) => {
+        if(event.target.localName === 'a' && event.target.href){
             sendMessage(event.target.href);
-        } else {
+        } else if(event.target.localName === 'a' && !event.target.href){
             sendMessage('https://wiki.ihris.org/wiki/CapacityPlus%27s_iHRIS_Suite');
         };
     });
@@ -45,6 +42,7 @@ function sendMessage(url) {
         .catch(error => console.error(`${error.message}`));
 }
 
+browser.tabs.executeScript({file: "/browser-polyfill.js"}).then(()=>console.log('nothing really')).catch(onError);
 browser.tabs.executeScript({file: '/content_scripts/ihriswikimenu.js'})
     .then(search)
     .then(openURL)
