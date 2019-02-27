@@ -6,8 +6,8 @@
     "description": "Adds a category based menu for the iHRIS wiki at https://wiki.ihris.org/wiki",
 
     "icons": {
-        "48": "icons/logo-48.png",
-        "96": "icons/logo-96.png"
+        "48": "/icons/logo-48.png",
+        "96": "/icons/logo-96.png"
     },
 
     "permissions": [
@@ -17,7 +17,7 @@
 
     "background": {
         "scripts": [
-            "browser-polyfill.js",
+            "/browser-polyfill.js",
             "/menu/index.js"
         ]
     },
@@ -26,14 +26,14 @@
         "matches": ["<all_urls>"],
 
         "js": [
-            "browser-polyfill.js",
+            "/browser-polyfill.js",
             "/content_scripts/ihriswikimenu.js"
         ]
     }],
 
     "browser_action":{
-        "default_icon": "icons/logo-32.png",
-        "default_title": "iHRIS Wiki Meu",
-        "default_popup": "menu/index.html"
+        "default_icon": "/icons/logo-32.png",
+        "default_title": "iHRIS Wiki Menu",
+        "default_popup": "/menu/index.html"
     }
 }
