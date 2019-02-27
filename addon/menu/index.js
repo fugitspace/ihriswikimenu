@@ -25,18 +25,19 @@ function onError(error){
 function openURL(){
     const anchor = document.querySelector('a');
     console.log("openURL running now");
-    anchor.addEventListener('click', (event) => {
+    document.addEventListener('click', (event) => {
         console.log(event);
-        const url = event.target.href;
-        sendMessage(url);
+        if(event.target.href){
+            sendMessage(event.target.href);
+        } else {
+            sendMessage('https://wiki.ihris.org/wiki/CapacityPlus%27s_iHRIS_Suite');
+        };
     });
 }
 
 function sendMessage(url) {
     browser.tabs.query({active:true, currentWindow: true})
         .then((tabs) => {
-            console.log(`Trying to send message for ${url}`);
-            console.log(tabs);
             browser.tabs.sendMessage(tabs[0].id, {url: url})
             .then(()=>console.log(`Message successfully sent`))
             .catch(onError);
