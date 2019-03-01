@@ -9,11 +9,12 @@ function search(){
             const anchorTxt = aTag.textContent || aTag.innerText;
             if(anchorTxt.toUpperCase().indexOf(needle) === -1) {
                 aTag.style.display = "none"; //hide
+                found_match = false;
             } else {
                 aTag.style.display = "";
+                found_match = true;
             }
         }
-        browser.tabs.sendMessage(6, {url: 'https://www.google.com'});
     });
     qry.focus(); //set focus on the search bar
 }
