@@ -15,12 +15,12 @@ http.get(`${host}/mediawiki/index.php?title=Special:Categories&offset=&limit=500
     res.on('end', () => {
         let dom = new JSDOM(data).window.document;
         let elements = Array.from(dom.getElementById('mw-content-text').getElementsByTagName('a')).filter(elem => RegExp('/wiki/Category*').test(elem));
-        dataToFile('categories.txt', elements, true);
+        dataToFile('categories.txt', elements, true); //write all categories to file
         
         fd.on('close', () => {
             const rl = readline.createInterface({
                 input: fs.createReadStream('data/categories.txt'),
-                crlfDelay: Infinity // wait for both \r and \n
+                crlfDelay: Infinity // wait for both \r and \n to mark end of line
             });
             rl.on('line', (line) => {
                 let lineJson = JSON.parse(line);
